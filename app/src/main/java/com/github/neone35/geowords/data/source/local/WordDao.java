@@ -4,6 +4,7 @@ import com.github.neone35.geowords.data.models.local.Word;
 
 import java.util.List;
 
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -11,6 +12,7 @@ import androidx.room.Query;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
+@Dao
 public interface WordDao {
 
     // Flowable triggers nothing on error; onNext on success / data update
@@ -21,11 +23,11 @@ public interface WordDao {
     @Query("SELECT * FROM words ORDER BY time_millis DESC")
     Flowable<List<Word>> getAll();
 
-    // returns row id in onSuccess
+    // returns row id
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<Long> insertOne(Word word);
+    void insertOne(Word word);
 
-    // returns number of rows affected by operation
-    @Delete
-    Single<Integer> deleteAll();
+    // returns number of rows affected
+    @Query("DELETE FROM words")
+    int deleteAll();
 }

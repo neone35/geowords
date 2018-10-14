@@ -18,9 +18,9 @@ public class WordInteractorImpl implements WordInteractor {
         OkHttpClient okClient = new OkHttpClient.Builder()
                 .addNetworkInterceptor(new StethoInterceptor())
                 .build();
-        String SPARK_BASE_URL = "https://wordsapiv1.p.mashape.com/words";
+        String WORDS_BASE_URL = "https://wordsapiv1.p.mashape.com/words/";
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(SPARK_BASE_URL)
+                .baseUrl(WORDS_BASE_URL)
                 // use Gson
                 .addConverterFactory(GsonConverterFactory.create())
                 // use RX

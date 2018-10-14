@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 
 import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 public class WordRepository implements WordDataSource {
 
@@ -44,20 +43,21 @@ public class WordRepository implements WordDataSource {
 
     @Override
     public Flowable<Word> getWord(String word) {
-        if (mWordsLocalDataSource.getWord(word) != null) {
-            return mWordsRemoteDataSource.getWord(word);
-        } else {
-            return mWordsRemoteDataSource.getWord(word);
-        }
+        return mWordsLocalDataSource.getWord(word)
+                .doOnNext(word1 -> {
+                    if (word1.getWord() == null) {
+                        mWordsRemoteDataSource.getWord(word);
+                    }
+                });
     }
 
     @Override
-    public Single<Long> insertOrUpdateWord(Word word) {
-        return null;
+    public void insertOrUpdateWord(Word word) {
+        mWordsLocalDataSource.insertOrUpdateWord(word);
     }
 
     @Override
-    public Single<Integer> deleteAllWords() {
-        return null;
+    public int deleteAllWords() {
+        return mWordsLocalDataSource.deleteAllWords();
     }
 }

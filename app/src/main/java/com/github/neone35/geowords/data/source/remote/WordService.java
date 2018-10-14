@@ -12,10 +12,6 @@ import retrofit2.http.Path;
 
 public interface WordService {
 
-    @Headers({
-            "X-Mashape-Key: X7MmtDfDWEmshGrZETAwmSjpf2qBp1q3O3fjsnIMIe4Hr6pUpy",
-            "Accept: application/json"
-    })
-    @GET("/words/{word}")
+    @GET("/words/{word}?mashape-key=X7MmtDfDWEmshGrZETAwmSjpf2qBp1q3O3fjsnIMIe4Hr6pUpy")
     Single<WordResponse> getWord(@Path("word") String word);
 }

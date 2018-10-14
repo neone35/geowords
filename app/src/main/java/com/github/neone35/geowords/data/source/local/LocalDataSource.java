@@ -2,14 +2,10 @@ package com.github.neone35.geowords.data.source.local;
 
 import com.github.neone35.geowords.data.models.local.Word;
 import com.github.neone35.geowords.data.source.WordDataSource;
-import com.github.neone35.geowords.data.source.remote.RemoteDataSource;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 public class LocalDataSource implements WordDataSource {
 
@@ -30,12 +26,12 @@ public class LocalDataSource implements WordDataSource {
     }
 
     @Override
-    public Single<Long> insertOrUpdateWord(Word word) {
-       return mWordDao.insertOne(word);
+    public void insertOrUpdateWord(Word word) {
+       mWordDao.insertOne(word);
     }
 
     @Override
-    public Single<Integer> deleteAllWords() {
+    public int deleteAllWords() {
         return mWordDao.deleteAll();
     }
 }

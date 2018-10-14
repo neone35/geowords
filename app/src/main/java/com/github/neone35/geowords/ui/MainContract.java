@@ -16,11 +16,11 @@ public interface MainContract {
 
         void showWords(List<Word> words);
 
-        void showWordDetailsUi(String taskId);
+        void showWordDetailsUi(Word wordResponse);
 
         void showLoadingWordError();
 
-        void showNoWords();
+        void showNoWords(String message);
 
         boolean isActive();
     }
@@ -31,9 +31,9 @@ public interface MainContract {
 
         void loadWords();
 
-        void addNewWord();
+        void addNewWord(Word newWord);
 
-        void openWordDetails(@NonNull Word requestedWord);
+        void fetchWord(@NonNull String requestedWord);
     }
 
 }

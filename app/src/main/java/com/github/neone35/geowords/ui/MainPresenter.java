@@ -2,6 +2,7 @@ package com.github.neone35.geowords.ui;
 
 import com.github.neone35.geowords.data.models.local.Word;
 import com.github.neone35.geowords.data.source.WordRepository;
+import com.orhanobut.logger.Logger;
 
 import androidx.annotation.NonNull;
 import io.reactivex.Scheduler;
@@ -25,8 +26,8 @@ public class MainPresenter implements MainContract.Presenter {
         mWordRepository = wordRepository;
         mMainView = mainView;
         mCompDisps = new CompositeDisposable();
-        mMainView.setPresenter(this);
         mScheduler = scheduler;
+        mMainView.setPresenter(this);
     }
 
     @Override
@@ -43,22 +44,24 @@ public class MainPresenter implements MainContract.Presenter {
                         // onNext
                         mMainView::showWords,
                         // onError
-                        throwable -> mMainView.showNoWords());
+                        throwable -> mMainView.showNoWords(throwable.getMessage()));
         mCompDisps.add(wordsDisp);
 
     }
 
     @Override
-    public void addNewWord() {
-
+    public void addNewWord(Word newWord) {
+        mWordRepository.insertOrUpdateWord(newWord);
     }
 
     @Override
-    public void openWordDetails(@NonNull Word requestedWord) {
+    public void fetchWord(@NonNull String requestedWord) {
+        Logger.d("fetchword is called!");
         mCompDisps.clear();
-        Disposable wordDisp = mWordRepository.getWord(requestedWord.getWord())
+        Disposable wordDisp = mWordRepository.getWord(requestedWord)
                 .observeOn(mScheduler)
-                .subscribe(word -> mMainView.showWordDetailsUi(word.getWord()));
+                .subscribe(word -> mMainView.showWordDetailsUi(word),
+                        throwable -> Logger.d(throwable));
         mCompDisps.add(wordDisp);
     }
 

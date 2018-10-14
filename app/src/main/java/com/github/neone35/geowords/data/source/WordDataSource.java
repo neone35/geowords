@@ -4,9 +4,7 @@ import com.github.neone35.geowords.data.models.local.Word;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 public interface WordDataSource {
 
@@ -14,7 +12,7 @@ public interface WordDataSource {
 
     Flowable<Word> getWord(String word);
 
-    Single<Long> insertOrUpdateWord(Word word);
+    void insertOrUpdateWord(Word word);
 
-    Single<Integer> deleteAllWords();
+    int deleteAllWords();
 }

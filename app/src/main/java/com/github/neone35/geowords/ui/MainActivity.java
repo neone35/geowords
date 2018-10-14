@@ -1,10 +1,7 @@
 package com.github.neone35.geowords.ui;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -36,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     AutoCompleteTextView actvSearch;
     @BindString(R.string.no_internet)
     String stringNoInternet;
-    String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
+    String[] languages={"Android","java","IOS","SQL","JDBC","Web services"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +49,23 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         actvSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Logger.d(adapterView.getAdapter().getItem(i));
+                String selectedItemText = adapterView.getAdapter().getItem(i).toString();
+                Logger.d(selectedItemText);
+                mPresenter.fetchWord(selectedItemText);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        mPresenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
     }
 
     private void setUpActivity() {
@@ -84,8 +95,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void showWordDetailsUi(String word) {
-
+    public void showWordDetailsUi(Word wordResponse) {
+        mPresenter.addNewWord(wordResponse);
+        // and show ui
+        Logger.d("showWordDetailsUi is called!");
+        Logger.d(wordResponse.getWord());
     }
 
     @Override
@@ -94,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void showNoWords() {
-
+    public void showNoWords(String message) {
+        Logger.d("No words found in DB: " + message);
     }
 
     @Override

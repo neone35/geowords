@@ -6,8 +6,6 @@ import com.github.neone35.geowords.data.source.WordDataSource;
 import java.util.List;
 
 import io.reactivex.Flowable;
-import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 
 public class RemoteDataSource implements WordDataSource {
 
@@ -17,7 +15,7 @@ public class RemoteDataSource implements WordDataSource {
         mWordInteractorImpl = wordInteractorImpl;
     }
 
-    // not used remotely, as only one word is requested at a time
+    // not used remotely as only one word is requested at a time
     @Override
     public Flowable<List<Word>> getWords() {
         return null;
@@ -30,18 +28,18 @@ public class RemoteDataSource implements WordDataSource {
                 .map(wordResponse ->
                         new Word(wordResponse.getWord(),
                                 wordResponse.getResults().get(0).getPartOfSpeech(),
-                                0));
+                                System.currentTimeMillis()));
     }
 
-    // not used remotely, as word is only fetched from API
+    // not used remotely as word is only fetched from API
     @Override
-    public Single<Long> insertOrUpdateWord(Word word) {
-        return null;
+    public void insertOrUpdateWord(Word word) {
+
     }
 
-    // not used remotely, as word is only fetched from API
+    // not used remotely as word is only fetched from API
     @Override
-    public Single<Integer> deleteAllWords() {
-        return null;
+    public int deleteAllWords() {
+        return 0;
     }
 }
