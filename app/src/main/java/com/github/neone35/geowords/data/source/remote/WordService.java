@@ -2,6 +2,9 @@ package com.github.neone35.geowords.data.source.remote;
 
 import com.github.neone35.geowords.data.models.remote.WordResponse;
 
+import java.util.List;
+
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -14,5 +17,5 @@ public interface WordService {
             "Accept: application/json"
     })
     @GET("/words/{word}")
-    Call<WordResponse> getWord(@Path("word") String word);
+    Single<WordResponse> getWord(@Path("word") String word);
 }

@@ -1,4 +1,4 @@
-package com.github.neone35.geowords;
+package com.github.neone35.geowords.ui;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -10,18 +10,25 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.facebook.stetho.Stetho;
+import com.github.neone35.geowords.Injection;
+import com.github.neone35.geowords.R;
+import com.github.neone35.geowords.data.models.local.Word;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainContract.View {
 
     private boolean SEARCH_ITEM_SELECTED = false;
+    private MainContract.Presenter mPresenter;
 
     @BindView(R.id.toolbar_main)
     Toolbar toolbarMain;
@@ -57,7 +64,47 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbarMain);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // Create the presenter
+        mPresenter = new MainPresenter(
+                Injection.provideTasksRepository(getApplicationContext()),
+                this,
+                // where to observe
+                AndroidSchedulers.mainThread());
     }
 
 
+    @Override
+    public void setLoadingIndicator(boolean active) {
+
+    }
+
+    @Override
+    public void showWords(List<Word> tasks) {
+
+    }
+
+    @Override
+    public void showWordDetailsUi(String word) {
+
+    }
+
+    @Override
+    public void showLoadingWordError() {
+
+    }
+
+    @Override
+    public void showNoWords() {
+
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
+    }
+
+    @Override
+    public void setPresenter(MainContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
 }

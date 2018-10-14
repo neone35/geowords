@@ -18,14 +18,13 @@ public class PrefUtils {
 
     private final SharedPreferences preferences;
 
-    private PrefUtils(Context context, SharedPreferences sharedPreferences) {
+    private PrefUtils(SharedPreferences sharedPreferences) {
         preferences = sharedPreferences;
     }
 
-    public static PrefUtils getInstance(@NonNull Context context,
-                                        @NonNull SharedPreferences sharedPreferences){
+    public static PrefUtils getInstance(@NonNull SharedPreferences sharedPreferences){
         if (INSTANCE == null) {
-            INSTANCE = new PrefUtils(context, sharedPreferences);
+            INSTANCE = new PrefUtils(sharedPreferences);
         }
         return INSTANCE;
     }
