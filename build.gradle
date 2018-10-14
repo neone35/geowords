@@ -28,8 +28,8 @@ ext {
     stetho_v = '1.5.0'
     butterknife_v = '9.0.0-SNAPSHOT' // AndroidX compatible
     retrofit_v = '2.4.0'
-    glide_v = '4.8.0'
     play_v = '16.0.0'
+    room_v = '1.1.1'
 }
 
 task clean(type: Delete) {

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Geowords</string>
     <string name="no_internet">No internet connection</string>
-    <string name="input_word_query">Input word query</string>
+    <string name="word_to_search">Word to search</string>
 </resources>

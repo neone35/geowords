@@ -53,6 +53,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5' // parsing
     implementation "com.facebook.stetho:stetho:$rootProject.stetho_v" // debugging in chrome
     implementation "com.facebook.stetho:stetho-okhttp3:$rootProject.stetho_v"
+    // database
+    annotationProcessor "android.arch.persistence.room:compiler:$room_v"
+    implementation "android.arch.persistence.room:runtime:$room_v"
+    implementation "android.arch.persistence.room:rxjava2:$room_v"
     // binding
     implementation "com.jakewharton:butterknife:$rootProject.butterknife_v"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknife_v"

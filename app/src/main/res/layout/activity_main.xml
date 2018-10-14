@@ -32,7 +32,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/actv_rounded_bg"
-            android:hint="@string/input_word_query"
+            android:hint="@string/word_to_search"
             android:textSize="24sp" />
 
     </androidx.appcompat.widget.Toolbar>

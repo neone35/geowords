@@ -5,7 +5,7 @@ Allows to associate user input with markers on the map. Saves search history to 
 
 ## Why this project
 This is a technical task provided by "MR Digital Group" (GPSWOX) for Junior Android Developer position. The exact requirements were as follows:
-1. Create 1st screen (activity) with appbar which contains input box and displays earlier search history.
+1. Create 1st screen (activity) with appbar which contains input box and displays earlier search history in dropdown.
    * Dropdown item must contain word, partOfSpeech & time of search;
    * Click on the dropdown item invokes new call to API and opens second (detail) activity;
 2. Create 2nd screen to display search details separated into two halfs of the screen:
