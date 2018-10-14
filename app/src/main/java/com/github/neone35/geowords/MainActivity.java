@@ -1,0 +1,63 @@
+package com.github.neone35.geowords;
+
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+
+import com.facebook.stetho.Stetho;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MainActivity extends AppCompatActivity {
+
+    private boolean SEARCH_ITEM_SELECTED = false;
+
+    @BindView(R.id.toolbar_main)
+    Toolbar toolbarMain;
+    @BindView(R.id.actv_search)
+    AutoCompleteTextView actvSearch;
+    @BindString(R.string.no_internet)
+    String stringNoInternet;
+    String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        setUpActivity();
+        ArrayAdapter<String> adapter = new
+                ArrayAdapter<>(this, android.R.layout.simple_list_item_1, languages);
+        actvSearch.setAdapter(adapter);
+        // number of characters to type for dropdown
+        actvSearch.setThreshold(1);
+        actvSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Logger.d(adapterView.getAdapter().getItem(i));
+            }
+        });
+    }
+
+    private void setUpActivity() {
+        ButterKnife.bind(this);
+        Stetho.initializeWithDefaults(this);
+        Logger.addLogAdapter(new AndroidLogAdapter());
+        setSupportActionBar(toolbarMain);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+
+}

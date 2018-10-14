@@ -1,0 +1,70 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.github.neone35.geowords"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "androidx.appcompat:appcompat:$rootProject.x_v"
+    implementation "androidx.annotation:annotation:$rootProject.x_v"
+    implementation "androidx.legacy:legacy-support-v4:$rootProject.x_v"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.x_v"
+    implementation "androidx.vectordrawable:vectordrawable:$rootProject.x_v"
+    implementation "androidx.cardview:cardview:$rootProject.x_v"
+    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation "com.google.android.material:material:$rootProject.x_v"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation "com.google.android.gms:play-services-maps:$rootProject.play_v"
+    implementation 'com.google.maps.android:android-maps-utils:0.5' // additional decoration
+    implementation "com.google.android.gms:play-services-location:$rootProject.play_v"
+
+    // 3RD PARTY
+    // reactive
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
+    implementation 'com.jakewharton.rxbinding:rxbinding:1.0.1' // views
+    implementation 'com.jakewharton.rxbinding:rxbinding-support-v4:1.0.1'
+    implementation 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.1'
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2' // permissions
+    implementation 'com.patloew.rxlocation:rxlocation:1.0.5' // location
+    // network
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit_v" // network calls
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_v" // gson & retrofit
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofit_v" // rx & retrofit
+    implementation 'com.google.code.gson:gson:2.8.5' // parsing
+    implementation "com.facebook.stetho:stetho:$rootProject.stetho_v" // debugging in chrome
+    implementation "com.facebook.stetho:stetho-okhttp3:$rootProject.stetho_v"
+    // binding
+    implementation "com.jakewharton:butterknife:$rootProject.butterknife_v"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknife_v"
+    // logging
+    implementation 'com.orhanobut:logger:2.2.0' // pretty logger
+
+    // TEST
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
+    testImplementation "org.mockito:mockito-core:2.23.0"
+
+    // @Generated annotation support
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+}
