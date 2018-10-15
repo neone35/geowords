@@ -2,17 +2,24 @@ package com.github.neone35.geowords.data.source.local;
 
 import com.github.neone35.geowords.data.models.local.Word;
 import com.github.neone35.geowords.data.source.WordDataSource;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 
 public class LocalDataSource implements WordDataSource {
 
     private final WordDao mWordDao;
+    // io thread scheduler
+    private Scheduler mScheduler;
 
-    public LocalDataSource(WordDao wordDao) {
+    public LocalDataSource(WordDao wordDao, Scheduler scheduler) {
         mWordDao = wordDao;
+        mScheduler = scheduler;
     }
 
     @Override
@@ -27,7 +34,10 @@ public class LocalDataSource implements WordDataSource {
 
     @Override
     public void insertOrUpdateWord(Word word) {
-       mWordDao.insertOne(word);
+        // Reactive version of Runnable
+        Completable.fromAction(() -> mWordDao.insertOne(word))
+                .subscribeOn(mScheduler)
+                .subscribe();
     }
 
     @Override

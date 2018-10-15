@@ -23,9 +23,9 @@ public interface WordDao {
     @Query("SELECT * FROM words ORDER BY time_millis DESC")
     Flowable<List<Word>> getAll();
 
-    // returns row id
+    // returns row id of inserted item
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertOne(Word word);
+    Long insertOne(Word word);
 
     // returns number of rows affected
     @Query("DELETE FROM words")

@@ -1,6 +1,7 @@
 package com.github.neone35.geowords.data.source;
 
 import com.github.neone35.geowords.data.models.local.Word;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class WordRepository implements WordDataSource {
                                               @NonNull WordDataSource wordsLocalDataSource) {
         if (sInstance == null) {
             sInstance = new WordRepository(wordsRemoteDataSource, wordsLocalDataSource);
+            Logger.d("Made new repository");
         }
         return sInstance;
     }
@@ -43,16 +45,12 @@ public class WordRepository implements WordDataSource {
 
     @Override
     public Flowable<Word> getWord(String word) {
-        return mWordsLocalDataSource.getWord(word)
-                .doOnNext(word1 -> {
-                    if (word1.getWord() == null) {
-                        mWordsRemoteDataSource.getWord(word);
-                    }
-                });
+        return mWordsRemoteDataSource.getWord(word);
     }
 
     @Override
     public void insertOrUpdateWord(Word word) {
+        Logger.d("insertOrUpdateWord is called with word" + word.getWord());
         mWordsLocalDataSource.insertOrUpdateWord(word);
     }
 

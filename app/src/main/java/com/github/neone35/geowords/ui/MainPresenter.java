@@ -51,6 +51,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void addNewWord(Word newWord) {
+        Logger.d("addNewWord is called!");
         mWordRepository.insertOrUpdateWord(newWord);
     }
 

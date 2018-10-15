@@ -24,7 +24,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
 
-    private boolean SEARCH_ITEM_SELECTED = false;
     private MainContract.Presenter mPresenter;
 
     @BindView(R.id.toolbar_main)
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     AutoCompleteTextView actvSearch;
     @BindString(R.string.no_internet)
     String stringNoInternet;
-    String[] languages={"Android","java","IOS","SQL","JDBC","Web services"};
+    String[] languages={"Android","java","IOS","SQL","JDBC","Web services", "Mother", "Father", "Run"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +40,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setUpActivity();
-        ArrayAdapter<String> adapter = new
-                ArrayAdapter<>(this, android.R.layout.simple_list_item_1, languages);
-        actvSearch.setAdapter(adapter);
-        // number of characters to type for dropdown
-        actvSearch.setThreshold(1);
-        actvSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedItemText = adapterView.getAdapter().getItem(i).toString();
-                Logger.d(selectedItemText);
-                mPresenter.fetchWord(selectedItemText);
-            }
-        });
+        listenOnActv();
     }
 
     @Override
@@ -68,6 +55,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mPresenter.unsubscribe();
     }
 
+    private void listenOnActv() {
+        ArrayAdapter<String> adapter = new
+                ArrayAdapter<>(this, android.R.layout.simple_list_item_1, languages);
+        actvSearch.setAdapter(adapter);
+        // number of characters to type for dropdown
+        actvSearch.setThreshold(1);
+        actvSearch.setOnItemClickListener((adapterView, view, i, l) -> {
+            String selectedItemText = adapterView.getAdapter().getItem(i).toString();
+            Logger.d(selectedItemText);
+            mPresenter.fetchWord(selectedItemText);
+        });
+    }
+
     private void setUpActivity() {
         ButterKnife.bind(this);
         Stetho.initializeWithDefaults(this);
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         // Create the presenter
         mPresenter = new MainPresenter(
-                Injection.provideTasksRepository(getApplicationContext()),
+                Injection.provideWordsRepository(getApplicationContext()),
                 this,
                 // where to observe
                 AndroidSchedulers.mainThread());
@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mPresenter.addNewWord(wordResponse);
         // and show ui
         Logger.d("showWordDetailsUi is called!");
-        Logger.d(wordResponse.getWord());
     }
 
     @Override
