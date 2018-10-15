@@ -24,7 +24,7 @@ public abstract class WordDatabase extends RoomDatabase {
             synchronized (LOCK) {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         WordDatabase.class, WordDatabase.DATABASE_NAME).build();
-                Logger.d("Made new database");
+                Logger.d("Made new database instance");
             }
         }
         return sInstance;

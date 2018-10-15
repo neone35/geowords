@@ -33,7 +33,7 @@ public class WordRepository implements WordDataSource {
                                               @NonNull WordDataSource wordsLocalDataSource) {
         if (sInstance == null) {
             sInstance = new WordRepository(wordsRemoteDataSource, wordsLocalDataSource);
-            Logger.d("Made new repository");
+            Logger.d("Made new repository instance");
         }
         return sInstance;
     }

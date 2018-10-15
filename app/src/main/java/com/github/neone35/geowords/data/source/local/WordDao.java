@@ -16,8 +16,6 @@ import io.reactivex.Single;
 public interface WordDao {
 
     // Flowable triggers nothing on error; onNext on success / data update
-    @Query("SELECT * FROM words WHERE id = :id")
-    Flowable<Word> getById(int id);
     @Query("SELECT * FROM words WHERE word = :word")
     Flowable<Word> getByWord(String word);
     @Query("SELECT * FROM words ORDER BY time_millis DESC")

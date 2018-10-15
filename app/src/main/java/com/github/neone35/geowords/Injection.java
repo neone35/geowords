@@ -14,16 +14,16 @@ import io.reactivex.schedulers.Schedulers;
 
 public class Injection {
 
-    public static WordRepository provideWordsRepository(@NonNull Context context) {
+    public static WordRepository provideWordsRepository(@NonNull Context context, Scheduler scheduler) {
         // pay attention to the order of sources!
         return WordRepository.getInstance(
-                provideLocalDataSource(context, Schedulers.io()),
-                provideRemoteDataSource());
+                provideLocalDataSource(context, scheduler),
+                provideRemoteDataSource(scheduler));
     }
 
-    private static RemoteDataSource provideRemoteDataSource() {
+    private static RemoteDataSource provideRemoteDataSource(Scheduler scheduler) {
         WordInteractorImpl wordInteractorImpl = new WordInteractorImpl();
-        return new RemoteDataSource(wordInteractorImpl);
+        return new RemoteDataSource(wordInteractorImpl, scheduler);
     }
 
     private static LocalDataSource provideLocalDataSource(Context context, Scheduler scheduler) {

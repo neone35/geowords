@@ -3,6 +3,8 @@ package com.github.neone35.geowords.data.source.remote;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.github.neone35.geowords.data.models.remote.WordResponse;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
@@ -32,6 +34,6 @@ public class WordInteractorImpl implements WordInteractor {
 
     @Override
     public Single<WordResponse> fetchWord(String inputWord) {
-        return wordService.getWord(inputWord).subscribeOn(Schedulers.io());
+        return wordService.getWord(inputWord);
     }
 }

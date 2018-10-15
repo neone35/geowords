@@ -14,7 +14,7 @@ public interface MainContract {
 
         void setLoadingIndicator(boolean active);
 
-        void showWords(List<Word> words);
+        void showWordsHistory(List<Word> words);
 
         void showWordDetailsUi(Word wordResponse);
 
@@ -29,7 +29,7 @@ public interface MainContract {
 
         void result(int requestCode, int resultCode);
 
-        void loadWords();
+        void loadWordsHistory();
 
         void addNewWord(Word newWord);
 

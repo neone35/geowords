@@ -2,6 +2,7 @@ package com.github.neone35.geowords.data.models.local;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -9,9 +10,8 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "words")
 public class Word {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    @ColumnInfo(name = "word")
+    @PrimaryKey
+    @NonNull
     private String word;
     @ColumnInfo(name = "part_of_speech")
     private String partOfSpeech;
@@ -19,25 +19,18 @@ public class Word {
     private long timeMillis;
 
     // Constructor used by Room to create Words
-    public Word(String word, String partOfSpeech, long timeMillis) {
+    public Word(@NonNull String word, String partOfSpeech, long timeMillis) {
         this.word = word;
         this.partOfSpeech = partOfSpeech;
         this.timeMillis = timeMillis;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    @NonNull
     public String getWord() {
         return word;
     }
 
-    public void setWord(String word) {
+    public void setWord(@NonNull String word) {
         this.word = word;
     }
 

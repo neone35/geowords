@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    android:layout_width="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp"
+    android:layout_height="match_parent"
+    android:paddingStart="10dp">
+
+    <TextView
+        android:id="@+id/tv_word"
+        android:layout_width="match_parent"
+        android:textSize="22sp"
+        android:textColor="@color/colorWhite"
+        tools:text="thanks"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_part_of_speech"
+        android:layout_width="match_parent"
+        android:textSize="16sp"
+        android:textColor="@color/colorAccent"
+        tools:text="noun"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_timestamp"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:textColor="@color/colorDivider"
+        tools:text="10-03 12:57"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -36,13 +36,14 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void loadWords() {
+    public void loadWordsHistory() {
+        Logger.d("loadWordsHistory is called!");
         mCompDisps.clear();
         Disposable wordsDisp = mWordRepository.getWords()
                 .observeOn(mScheduler)
                 .subscribe(
                         // onNext
-                        mMainView::showWords,
+                        mMainView::showWordsHistory,
                         // onError
                         throwable -> mMainView.showNoWords(throwable.getMessage()));
         mCompDisps.add(wordsDisp);
@@ -61,14 +62,13 @@ public class MainPresenter implements MainContract.Presenter {
         mCompDisps.clear();
         Disposable wordDisp = mWordRepository.getWord(requestedWord)
                 .observeOn(mScheduler)
-                .subscribe(word -> mMainView.showWordDetailsUi(word),
-                        throwable -> Logger.d(throwable));
+                .subscribe(mMainView::showWordDetailsUi, Throwable::printStackTrace);
         mCompDisps.add(wordDisp);
     }
 
     @Override
     public void subscribe() {
-        loadWords();
+        loadWordsHistory();
     }
 
     @Override
