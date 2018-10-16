@@ -2,4 +2,7 @@
     <string name="app_name">Geowords</string>
     <string name="no_internet">No internet connection</string>
     <string name="word_to_search">Word to search</string>
+    <string name="add_word_marker">Add word marker</string>
+    <string name="no_synonyms">No synonyms found</string>
+    <string name="no_known_as">No \'known as\' found</string>
 </resources>

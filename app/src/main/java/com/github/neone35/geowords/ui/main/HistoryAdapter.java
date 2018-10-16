@@ -1,4 +1,4 @@
-package com.github.neone35.geowords.ui;
+package com.github.neone35.geowords.ui.main;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -18,17 +18,18 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import butterknife.ButterKnife;
 
 
-public class HistorySearchAdapter extends ArrayAdapter<Word> {
+public class HistoryAdapter extends ArrayAdapter<Word> {
     private ArrayList<Word> items;
     private ArrayList<Word> itemsAll;
     private ArrayList<Word> suggestions;
     private int viewResourceId;
 
     @SuppressWarnings("unchecked")
-    HistorySearchAdapter(Context context, int viewResourceId,
-                         ArrayList<Word> items) {
+    HistoryAdapter(Context context, int viewResourceId,
+                   ArrayList<Word> items) {
         super(context, viewResourceId, items);
         this.items = items;
         this.itemsAll = (ArrayList<Word>) items.clone();
@@ -48,6 +49,7 @@ public class HistorySearchAdapter extends ArrayAdapter<Word> {
         return items.get(position);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = convertView;

@@ -1,6 +1,7 @@
 package com.github.neone35.geowords.data.source.local;
 
 import com.github.neone35.geowords.data.models.local.Word;
+import com.github.neone35.geowords.data.models.remote.WordResponse;
 import com.github.neone35.geowords.data.source.WordDataSource;
 import com.orhanobut.logger.Logger;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Scheduler;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class LocalDataSource implements WordDataSource {
@@ -30,6 +32,12 @@ public class LocalDataSource implements WordDataSource {
     @Override
     public Flowable<Word> getWord(String word) {
         return mWordDao.getByWord(word);
+    }
+
+    // not used locally as word is only received from DB
+    @Override
+    public Single<WordResponse> fetchWord(String word) {
+        return null;
     }
 
     @Override

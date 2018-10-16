@@ -1,8 +1,9 @@
-package com.github.neone35.geowords.ui;
+package com.github.neone35.geowords.ui.main;
 
 import com.github.neone35.geowords.BasePresenter;
 import com.github.neone35.geowords.BaseView;
 import com.github.neone35.geowords.data.models.local.Word;
+import com.github.neone35.geowords.data.models.remote.WordResponse;
 
 import java.util.List;
 
@@ -16,9 +17,9 @@ public interface MainContract {
 
         void showWordsHistory(List<Word> words);
 
-        void showWordDetailsUi(Word wordResponse);
+        void showWordDetailsUi(WordResponse wordResponse);
 
-        void showLoadingWordError();
+        void showLoadingWordError(String word);
 
         void showNoWords(String message);
 

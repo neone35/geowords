@@ -4,23 +4,38 @@ import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 @Generated("com.robohorse.robopojogenerator")
+@Parcel
 public class ResultsItem{
 
 	@SerializedName("partOfSpeech")
-	private String partOfSpeech;
+	String partOfSpeech;
 
 	@SerializedName("definition")
-	private String definition;
+	String definition;
 
 	@SerializedName("derivation")
-	private List<String> derivation;
+	List<String> derivation;
 
 	@SerializedName("typeOf")
-	private List<String> typeOf;
+	List<String> typeOf;
 
 	@SerializedName("synonyms")
-	private List<String> synonyms;
+	List<String> synonyms;
+
+    // needed by the Parceler library
+    public ResultsItem() {
+    }
+    public ResultsItem(String partOfSpeech, String definition, List<String> derivation,
+                       List<String> typeOf, List<String> synonyms) {
+        this.partOfSpeech = partOfSpeech;
+        this.definition = definition;
+        this.derivation = derivation;
+        this.typeOf = typeOf;
+        this.synonyms = synonyms;
+    }
 
 	public void setPartOfSpeech(String partOfSpeech){
 		this.partOfSpeech = partOfSpeech;

@@ -1,6 +1,7 @@
 package com.github.neone35.geowords.data.source;
 
 import com.github.neone35.geowords.data.models.local.Word;
+import com.github.neone35.geowords.data.models.remote.WordResponse;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.annotation.Nullable;
 
 import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 public class WordRepository implements WordDataSource {
 
@@ -46,6 +48,11 @@ public class WordRepository implements WordDataSource {
     @Override
     public Flowable<Word> getWord(String word) {
         return mWordsRemoteDataSource.getWord(word);
+    }
+
+    @Override
+    public Single<WordResponse> fetchWord(String word) {
+        return mWordsRemoteDataSource.fetchWord(word);
     }
 
     @Override

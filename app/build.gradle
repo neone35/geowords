@@ -54,7 +54,8 @@ dependencies {
     implementation 'com.patloew.rxlocation:rxlocation:1.0.5' // location
     // network
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit_v" // network calls
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_v" // gson & retrofit
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_v"
+    // gson & retrofit
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofit_v" // rx & retrofit
     implementation 'com.google.code.gson:gson:2.8.5' // parsing
     implementation "com.facebook.stetho:stetho:$rootProject.stetho_v" // debugging in chrome
@@ -70,6 +71,10 @@ dependencies {
     implementation 'com.orhanobut:logger:2.2.0' // pretty logger
     // helper functions
     implementation 'com.blankj:utilcode:1.17.3'
+    api 'com.google.guava:guava:25.1-android'
+    // parcelable to avoid repeatable calls
+    implementation 'org.parceler:parceler-api:1.1.11'
+    annotationProcessor 'org.parceler:parceler:1.1.11'
 
     // TEST
     testImplementation 'junit:junit:4.12'

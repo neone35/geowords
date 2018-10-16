@@ -4,23 +4,38 @@ import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 @Generated("com.robohorse.robopojogenerator")
+@Parcel
 public class WordResponse{
 
 	@SerializedName("pronunciation")
-	private Pronunciation pronunciation;
+	Pronunciation pronunciation;
 
 	@SerializedName("word")
-	private String word;
+	String word;
 
 	@SerializedName("results")
-	private List<ResultsItem> results;
+	List<ResultsItem> results;
 
 	@SerializedName("syllables")
-	private Syllables syllables;
+	Syllables syllables;
 
 	@SerializedName("frequency")
-	private double frequency;
+	double frequency;
+
+    // needed by the Parceler library
+    public WordResponse() {
+    }
+    public WordResponse(Pronunciation pronunciation, String word, List<ResultsItem> results,
+                        Syllables syllables, double frequency) {
+        this.pronunciation = pronunciation;
+        this.word = word;
+        this.results = results;
+        this.syllables = syllables;
+        this.frequency = frequency;
+    }
 
 	public void setPronunciation(Pronunciation pronunciation){
 		this.pronunciation = pronunciation;

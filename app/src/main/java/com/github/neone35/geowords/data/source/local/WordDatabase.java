@@ -8,9 +8,12 @@ import com.orhanobut.logger.Logger;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 // version number needs to be incremented if schema models change
 @Database(entities = {Word.class}, version = 1)
+@TypeConverters(Converters.class)
 public abstract class WordDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "wordsDB";

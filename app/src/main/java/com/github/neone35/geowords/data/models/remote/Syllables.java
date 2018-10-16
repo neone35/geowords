@@ -4,14 +4,25 @@ import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 @Generated("com.robohorse.robopojogenerator")
+@Parcel
 public class Syllables{
 
 	@SerializedName("count")
-	private int count;
+	int count;
 
 	@SerializedName("list")
-	private List<String> list;
+	List<String> list;
+
+	// needed by the Parceler library
+	public Syllables() {
+	}
+	public Syllables(int count, List<String> list) {
+		this.count = count;
+		this.list = list;
+	}
 
 	public void setCount(int count){
 		this.count = count;

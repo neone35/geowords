@@ -1,12 +1,14 @@
 package com.github.neone35.geowords.data.source.remote;
 
 import com.github.neone35.geowords.data.models.local.Word;
+import com.github.neone35.geowords.data.models.remote.WordResponse;
 import com.github.neone35.geowords.data.source.WordDataSource;
 
 import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.Scheduler;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class RemoteDataSource implements WordDataSource {
@@ -35,7 +37,14 @@ public class RemoteDataSource implements WordDataSource {
                 .map(wordResponse ->
                         new Word(wordResponse.getWord(),
                                 wordResponse.getResults().get(0).getPartOfSpeech(),
-                                System.currentTimeMillis()));
+                                System.currentTimeMillis(), null, 0));
+    }
+
+    // get remote response object only (don't convert to local Word)
+    @Override
+    public Single<WordResponse> fetchWord(String word) {
+        return mWordInteractorImpl.fetchWord(word)
+                .subscribeOn(mScheduler);
     }
 
     // not used remotely as word is only fetched from API

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b4a03f6a4318d9aa1739f40955f90d42",
+    "identityHash": "76cf0ebeafe654768fb4f6438417aa7b",
     "entities": [
       {
         "tableName": "words",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`word` TEXT NOT NULL, `part_of_speech` TEXT, `time_millis` INTEGER NOT NULL, PRIMARY KEY(`word`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`word` TEXT NOT NULL, `part_of_speech` TEXT, `time_millis` INTEGER NOT NULL, `lat_lng` TEXT, `icon_id` INTEGER NOT NULL, PRIMARY KEY(`word`))",
         "fields": [
           {
             "fieldPath": "word",
@@ -25,6 +25,18 @@
             "columnName": "time_millis",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "latLng",
+            "columnName": "lat_lng",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconId",
+            "columnName": "icon_id",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -39,7 +51,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b4a03f6a4318d9aa1739f40955f90d42\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"76cf0ebeafe654768fb4f6438417aa7b\")"
     ]
   }
 }

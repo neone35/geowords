@@ -1,4 +1,4 @@
-package com.github.neone35.geowords.ui;
+package com.github.neone35.geowords.ui.main;
 
 import com.github.neone35.geowords.data.models.local.Word;
 import com.github.neone35.geowords.data.source.WordRepository;
@@ -38,16 +38,14 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void loadWordsHistory() {
         Logger.d("loadWordsHistory is called!");
-        mCompDisps.clear();
-        Disposable wordsDisp = mWordRepository.getWords()
+        Disposable loadWordsDisp = mWordRepository.getWords()
                 .observeOn(mScheduler)
                 .subscribe(
                         // onNext
                         mMainView::showWordsHistory,
                         // onError
                         throwable -> mMainView.showNoWords(throwable.getMessage()));
-        mCompDisps.add(wordsDisp);
-
+        mCompDisps.add(loadWordsDisp);
     }
 
     @Override
@@ -59,11 +57,14 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void fetchWord(@NonNull String requestedWord) {
         Logger.d("fetchword is called!");
-        mCompDisps.clear();
-        Disposable wordDisp = mWordRepository.getWord(requestedWord)
+        Disposable fetchWordDisp = mWordRepository.fetchWord(requestedWord)
                 .observeOn(mScheduler)
-                .subscribe(mMainView::showWordDetailsUi, Throwable::printStackTrace);
-        mCompDisps.add(wordDisp);
+                .subscribe(
+                        // onNext
+                        mMainView::showWordDetailsUi,
+                        // onError
+                        throwable -> mMainView.showLoadingWordError(requestedWord));
+        mCompDisps.add(fetchWordDisp);
     }
 
     @Override

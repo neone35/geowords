@@ -13,5 +13,5 @@ import retrofit2.http.Path;
 public interface WordService {
 
     @GET("/words/{word}?mashape-key=X7MmtDfDWEmshGrZETAwmSjpf2qBp1q3O3fjsnIMIe4Hr6pUpy")
-    Single<WordResponse> getWord(@Path("word") String word);
+    Single<WordResponse> fetchWord(@Path("word") String word);
 }

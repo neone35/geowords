@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/ll_detail_word"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.detail.DetailFragment"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_detail_word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="apple"
+        android:textSize="22sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_detail_part_of_speech"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        tools:text="noun"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_detail_synonyms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="something, something, something"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_detail_type_of"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="apple, tree"
+        android:textSize="16sp"
+        />
+
+</LinearLayout>

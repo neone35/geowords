@@ -1,5 +1,7 @@
 package com.github.neone35.geowords.data.models.local;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -17,12 +19,19 @@ public class Word {
     private String partOfSpeech;
     @ColumnInfo(name = "time_millis")
     private long timeMillis;
+    @ColumnInfo(name = "lat_lng")
+    private LatLng latLng;
+    @ColumnInfo(name = "icon_id")
+    private int iconId;
 
     // Constructor used by Room to create Words
-    public Word(@NonNull String word, String partOfSpeech, long timeMillis) {
+    public Word(@NonNull String word, String partOfSpeech, long timeMillis,
+                LatLng latLng, int iconId) {
         this.word = word;
         this.partOfSpeech = partOfSpeech;
         this.timeMillis = timeMillis;
+        this.latLng = latLng;
+        this.iconId = iconId;
     }
 
     @NonNull
@@ -48,5 +57,21 @@ public class Word {
 
     public void setTimeMillis(long timeMillis) {
         this.timeMillis = timeMillis;
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+
+    public int getIconId() {
+        return iconId;
+    }
+
+    public void setIconId(int iconId) {
+        this.iconId = iconId;
     }
 }
