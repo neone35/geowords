@@ -29,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -69,6 +70,7 @@ public class MapFragment extends Fragment implements
     private int[] mIconIds = {R.drawable.ic_twotone_explore_24px, R.drawable.ic_twotone_grade_24px,
             R.drawable.ic_twotone_language_24px, R.drawable.ic_twotone_offline_bolt_24px,
     R.drawable.ic_twotone_work_24px};
+    private LayoutInflater mInflater;
 
     public MapFragment() {
         // Required empty public constructor
@@ -107,7 +109,8 @@ public class MapFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        mInflater = inflater;
+        View rootView = mInflater.inflate(R.layout.fragment_map, container, false);
         ButterKnife.bind(this, rootView);
 
         // Inflate support map fragment into this layout
@@ -179,6 +182,7 @@ public class MapFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setInfoWindowAdapter(new MapPopupAdapter(mInflater));
 
         // locate user after location permission granted
         Disposable permissionDisp = rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -250,7 +254,11 @@ public class MapFragment extends Fragment implements
         // generate marker with default/custom icon
         if (word.getLatLng() != null) {
             MarkerOptions markerOptions =
-                    MapUtils.generateMarker(mCtx, word.getLatLng(), word.getWord(), word.getIconId());
+                    MapUtils.generateMarker(mCtx,
+                            word.getLatLng(),
+                            word.getWord(),
+                            word.getIconId())
+                            .snippet(word.getPartOfSpeech());
             mMap.clear();
             mMap.addMarker(markerOptions);
         } else {
