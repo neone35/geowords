@@ -3,11 +3,16 @@ package com.github.neone35.geowords.ui.detail;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +21,7 @@ import com.github.neone35.geowords.Injection;
 import com.github.neone35.geowords.R;
 import com.github.neone35.geowords.data.models.local.Word;
 import com.github.neone35.geowords.utils.MapUtils;
+import com.github.neone35.geowords.utils.PrefUtils;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +34,7 @@ import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.Objects;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -55,6 +62,13 @@ public class MapFragment extends Fragment implements
     private String mWord;
     private SupportMapFragment mMapFragment;
     private Word mDbWord;
+    private static final String KEY_CUSTOM_ICON = "custom_icon";
+    private PrefUtils mPrefUtils;
+    private MenuItem mDefaultIconItem;
+    private MenuItem mCustomIconItem;
+    private int[] mIconIds = {R.drawable.ic_twotone_explore_24px, R.drawable.ic_twotone_grade_24px,
+            R.drawable.ic_twotone_language_24px, R.drawable.ic_twotone_offline_bolt_24px,
+    R.drawable.ic_twotone_work_24px};
 
     public MapFragment() {
         // Required empty public constructor
@@ -74,6 +88,7 @@ public class MapFragment extends Fragment implements
         if (getArguments() != null) {
             mWord = getArguments().getString(ARG_WORD_STRING);
         }
+        setHasOptionsMenu(true);
 
         rxLocation = new RxLocation(Objects.requireNonNull(this.getActivity()));
         rxPermissions = new RxPermissions(this);
@@ -85,6 +100,7 @@ public class MapFragment extends Fragment implements
                 this,
                 // where to observe
                 AndroidSchedulers.mainThread());
+        mPrefUtils = PrefUtils.getInstance(PreferenceManager.getDefaultSharedPreferences(mCtx));
     }
 
     @Override
@@ -98,12 +114,66 @@ public class MapFragment extends Fragment implements
         // getChildFragmentManager returns private fragment manager to manage fragments inside this fragment
         mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frag_google_map);
         if (mMapFragment != null) {
+            mMapFragment.setRetainInstance(true);
             mMapFragment.getMapAsync(this);
             // get Word object from database and load marker on complete
             mPresenter.getWordObject(mWord);
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDisps.clear();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_map, menu);
+        MenuItem iconItem = menu.findItem(R.id.menu_detail_icon);
+        mDefaultIconItem = iconItem.getSubMenu().findItem(R.id.menu_detail_default_icon);
+        mCustomIconItem = iconItem.getSubMenu().findItem(R.id.menu_detail_custom_icon);
+        if (!mPrefUtils.getBoolean(KEY_CUSTOM_ICON)) {
+            // set default icon option checked
+            mDefaultIconItem.setChecked(true);
+            mCustomIconItem.setChecked(false);
+        } else {
+            mDefaultIconItem.setChecked(false);
+            mCustomIconItem.setChecked(true);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_detail_default_icon:
+                mPrefUtils.putBoolean(KEY_CUSTOM_ICON, false);
+                mDefaultIconItem.setChecked(true);
+                mCustomIconItem.setChecked(false);
+                return true;
+            case R.id.menu_detail_custom_icon:
+                mPrefUtils.putBoolean(KEY_CUSTOM_ICON, true);
+                mCustomIconItem.setChecked(true);
+                mDefaultIconItem.setChecked(false);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -126,8 +196,14 @@ public class MapFragment extends Fragment implements
 
     private void listenForLongMapPress() {
         mMap.setOnMapLongClickListener(latLng -> {
+            int iconId = 0;
+            // set custom icon id if option enabled
+            if (mPrefUtils.getBoolean(KEY_CUSTOM_ICON)) {
+                int rnd = new Random().nextInt(mIconIds.length);
+                iconId = mIconIds[rnd];
+            }
             // update local DB word with latlng
-            Word updatedWord = new Word(mWord, mDbWord.getPartOfSpeech(), mDbWord.getTimeMillis(), latLng, 0);
+            Word updatedWord = new Word(mWord, mDbWord.getPartOfSpeech(), mDbWord.getTimeMillis(), latLng, iconId);
             mPresenter.updateWordObject(updatedWord);
         });
     }
@@ -144,7 +220,7 @@ public class MapFragment extends Fragment implements
                         .subscribe(address -> {
                             // Add a marker of user location & zoom to it
                             mUserLatLng = new LatLng(address.getLatitude(), address.getLongitude());
-                            mMap.addMarker(MapUtils.generateMarker(mCtx, mUserLatLng, R.drawable.ic_target_24dp));
+                            mMap.addMarker(MapUtils.generateMarker(mCtx, mUserLatLng, "You", R.drawable.ic_target_24dp));
                             zoomToWordOrUser();
                         });
                 mDisps.add(locationDisp);
@@ -171,11 +247,11 @@ public class MapFragment extends Fragment implements
     public void loadMarker(Word word) {
         // set local variable to update on long press
         mDbWord = word;
-        // generate marker with default icon
+        // generate marker with default/custom icon
         if (word.getLatLng() != null) {
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(word.getLatLng())
-                    .title(word.getWord());
+            MarkerOptions markerOptions =
+                    MapUtils.generateMarker(mCtx, word.getLatLng(), word.getWord(), word.getIconId());
+            mMap.clear();
             mMap.addMarker(markerOptions);
         } else {
             ToastUtils.showShort("No marker set for word " + word.getWord());

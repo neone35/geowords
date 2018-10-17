@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         }
     }
 
-    // unsubscribe onDestroy to continue operations onPause (ex. addNewWord)
+    // unsubscribe in onDestroy to continue operations onPause (ex. addNewWord)
     @Override
     protected void onDestroy() {
         super.onDestroy();

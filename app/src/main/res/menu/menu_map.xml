@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_detail_icon"
+        android:title="@string/icon"
+        app:showAsAction="ifRoom" >
+        <menu>
+            <item android:id="@+id/menu_detail_default_icon"
+                android:checkable="true"
+                app:iconTint="@color/colorPrimaryDark"
+                android:title="@string/default_icon" />
+            <item android:id="@+id/menu_detail_custom_icon"
+                android:checkable="true"
+                app:iconTint="@color/colorPrimaryDark"
+                android:title="@string/custom_icon" />
+        </menu>
+    </item>
+</menu>

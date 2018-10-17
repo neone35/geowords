@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MapUtils {
 
-    public static MarkerOptions generateMarker(Context ctx, LatLng latLng, int markerBgDrawableId) {
+    public static MarkerOptions generateMarker(Context ctx, LatLng latLng,  String title, int markerBgDrawableId) {
         // Build an marker with custom or default icon
         if (markerBgDrawableId != 0) {
             IconGenerator iconGenerator = new IconGenerator(ctx);
@@ -25,9 +25,11 @@ public class MapUtils {
             // Build a marker
             return new MarkerOptions()
                     .position(latLng)
+                    .title(title)
                     .icon(icon);
         } else {
             return new MarkerOptions()
+                    .title(title)
                     .position(latLng);
         }
     }
