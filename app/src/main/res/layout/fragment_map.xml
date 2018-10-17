@@ -6,7 +6,7 @@
     tools:context=".ui.detail.MapFragment" >
 
     <fragment
-        android:id="@+id/frag_google_map"
+        android:id="@+id/frag_detail_google_map"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

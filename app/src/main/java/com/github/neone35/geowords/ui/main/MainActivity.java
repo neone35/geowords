@@ -2,9 +2,13 @@ package com.github.neone35.geowords.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
+import android.widget.ProgressBar;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.facebook.stetho.Stetho;
@@ -12,9 +16,22 @@ import com.github.neone35.geowords.Injection;
 import com.github.neone35.geowords.R;
 import com.github.neone35.geowords.data.models.local.Word;
 import com.github.neone35.geowords.data.models.remote.WordResponse;
+import com.github.neone35.geowords.ui.MapPopupAdapter;
 import com.github.neone35.geowords.ui.detail.DetailActivity;
+import com.github.neone35.geowords.utils.MapUtils;
 import com.github.neone35.geowords.utils.NetworkUtils;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxAutoCompleteTextView;
+import com.jakewharton.rxbinding.widget.RxCompoundButton;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -34,11 +51,19 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
+public class MainActivity extends AppCompatActivity implements
+        MainContract.View, OnMapReadyCallback {
 
     private MainContract.Presenter mPresenter;
     public static final String KEY_WORD_PARCELABLE = "word-parcelable";
+    private SupportMapFragment mMapFragment;
+    private GoogleMap mMap;
+    ArrayList<Word> mAllWords = new ArrayList<>();
 
+    @BindView(R.id.fab_search)
+    FloatingActionButton fabSearch;
+    @BindView(R.id.pb_main)
+    ProgressBar pbMain;
     @BindView(R.id.toolbar_main)
     Toolbar toolbarMain;
     @BindView(R.id.actv_search)
@@ -54,12 +79,63 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setUpActivity();
         if (NetworkUtils.isNetworkConnected(this)) {
             listenOnActv();
+            listenFab();
         } else {
             ToastUtils.showShort(stringNoInternet);
         }
+
+        // only create fragment if there was no configuration change
+        if (savedInstanceState == null) {
+            mMapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.frag_main_google_map);
+            if (mMapFragment != null) {
+                mMapFragment.setRetainInstance(true);
+                mMapFragment.getMapAsync(this);
+            }
+        }
     }
 
+    private void setUpActivity() {
+        ButterKnife.bind(this);
+        Stetho.initializeWithDefaults(this);
+        Logger.addLogAdapter(new AndroidLogAdapter());
+        setSupportActionBar(toolbarMain);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // Create the presenter
+        mPresenter = new MainPresenter(
+                // where to subscribe
+                Injection.provideWordsRepository(getApplicationContext(), Schedulers.io()),
+                this,
+                // where to observe
+                AndroidSchedulers.mainThread());
+        pbMain.setVisibility(View.GONE);
+    }
+
+    private void listenFab() {
+        RxView.clicks(fabSearch)
+                .debounce(100, TimeUnit.MILLISECONDS)
+                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    // text must be longer than 2 chars
+                    getActvInputAndFetch();
+                }, throwable -> {
+                    showTopToast("Word not found");
+                    throwable.printStackTrace();
+                });
+    }
+
+    private void getActvInputAndFetch() {
+        // text must be longer than 2 chars
+        String actvText = actvSearch.getText().toString();
+        if (actvText.length() > 2) {
+            mPresenter.fetchWord(actvText);
+        } else {
+            showTopToast("Word must be longer than 2 chars");
+        }
+    }
     // unsubscribe in onDestroy to continue operations onPause (ex. addNewWord)
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -81,12 +157,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     // text must be longer than 2 chars
-                    String actvText = actvSearch.getText().toString();
-                    if (actvText.length() > 2) {
-                        mPresenter.fetchWord(actvText);
-                    } else {
-                        showTopToast("Word must be longer than 2 chars");
-                    }
+                    getActvInputAndFetch();
                 }, throwable -> {
                     showTopToast("Word not found");
                     throwable.printStackTrace();
@@ -118,34 +189,25 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         ToastUtils.setGravity(Gravity.TOP, 0, abHeight + statusBarHeight);
     }
 
-    private void setUpActivity() {
-        ButterKnife.bind(this);
-        Stetho.initializeWithDefaults(this);
-        Logger.addLogAdapter(new AndroidLogAdapter());
-        setSupportActionBar(toolbarMain);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        // Create the presenter
-        mPresenter = new MainPresenter(
-                // where to subscribe
-                Injection.provideWordsRepository(getApplicationContext(), Schedulers.io()),
-                this,
-                // where to observe
-                AndroidSchedulers.mainThread());
-    }
-
 
     @Override
     public void setLoadingIndicator(boolean active) {
-
+        if (active) {
+            pbMain.setVisibility(View.VISIBLE);
+            pbMain.setIndeterminate(true);
+        } else {
+            pbMain.setVisibility(View.GONE);
+            pbMain.setIndeterminate(false);
+        }
     }
 
     @Override
     public void showWordsHistory(List<Word> wordList) {
         Logger.d("showWordsHistory is called!");
-        ArrayList<Word> words = new ArrayList<>(wordList);
-        HistoryAdapter adapter = new HistoryAdapter(this, R.layout.activity_main_history_item, words);
+        mAllWords = new ArrayList<>(wordList);
+        HistoryAdapter adapter = new HistoryAdapter(this, R.layout.activity_main_history_item, mAllWords);
         actvSearch.setAdapter(adapter);
+        showAssignedMapMarkers();
     }
 
     // called after successful word fetch
@@ -182,5 +244,39 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void setPresenter(MainContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Logger.d("Map is ready!");
+        mMap = googleMap;
+        mMap.setInfoWindowAdapter(new MapPopupAdapter(LayoutInflater.from(this)));
+    }
+
+    private void showAssignedMapMarkers() {
+        // make list of words with LatLng assigned
+        ArrayList<Marker> markerList = new ArrayList<>();
+        for (int i = 0; i < mAllWords.size(); i++) {
+            Word word = mAllWords.get(i);
+            if (word.getLatLng() != null) {
+                MarkerOptions markerOptions =
+                        MapUtils.generateMarker(this,
+                                word.getLatLng(),
+                                word.getWord(),
+                                word.getIconId())
+                                .snippet(word.getPartOfSpeech());
+                Marker wordMarker = mMap.addMarker(markerOptions);
+                markerList.add(wordMarker);
+            }
+        }
+        // animate camera to all found words
+        if (!markerList.isEmpty()) {
+            LatLngBounds allWordsBounds = MapUtils.getMarkerBounds(markerList);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(allWordsBounds, 100);
+            mMap.setOnCameraIdleListener(() -> mMap.animateCamera(cu));
+            // remove idle listener after seconds
+            final Handler handler = new Handler();
+            handler.postDelayed(() -> mMap.setOnCameraIdleListener(null), 1000);
+        }
     }
 }

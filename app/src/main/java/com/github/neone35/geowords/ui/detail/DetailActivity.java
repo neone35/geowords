@@ -17,30 +17,30 @@ import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private FragmentManager mFragmentManager;
     @BindView(R.id.fl_details)
     FrameLayout flWeb;
     @BindView(R.id.fl_map)
     FrameLayout flMap;
+    Parcelable mWordResponseParcel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        mFragmentManager = getSupportFragmentManager();
+        FragmentManager mFragmentManager = getSupportFragmentManager();
 
         // check if intent bundle received successfully and setup view
         Bundle mainExtrasBundle = getIntent().getExtras();
         if (mainExtrasBundle != null) {
-            Parcelable wordResponseParcel = mainExtrasBundle.getParcelable(MainActivity.KEY_WORD_PARCELABLE);
+            mWordResponseParcel = mainExtrasBundle.getParcelable(MainActivity.KEY_WORD_PARCELABLE);
             // only create fragment if there was no configuration change
-            if (savedInstanceState == null && wordResponseParcel != null) {
-                DetailFragment additiveFragment = DetailFragment.newInstance(wordResponseParcel);
+            if (savedInstanceState == null && mWordResponseParcel != null) {
+                DetailFragment additiveFragment = DetailFragment.newInstance(mWordResponseParcel);
                 mFragmentManager.beginTransaction()
                         .add(R.id.fl_details, additiveFragment)
                         .commit();
-                WordResponse wordResponse = Parcels.unwrap(wordResponseParcel);
+                WordResponse wordResponse = Parcels.unwrap(mWordResponseParcel);
                 String requestedWord = wordResponse.getWord();
                 MapFragment mapFragment = MapFragment.newInstance(requestedWord);
                 // inflate Map fragment here
@@ -49,6 +49,18 @@ public class DetailActivity extends AppCompatActivity {
                         .commit();
             }
         }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mWordResponseParcel = savedInstanceState.getParcelable(MainActivity.KEY_WORD_PARCELABLE);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(MainActivity.KEY_WORD_PARCELABLE, mWordResponseParcel);
+        super.onSaveInstanceState(outState);
     }
 
 }

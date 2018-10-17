@@ -67,11 +67,15 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void fetchWord(@NonNull String requestedWord) {
         Logger.d("fetchword is called!");
+        mMainView.setLoadingIndicator(true);
         Disposable fetchWordDisp = mWordRepository.fetchWord(requestedWord)
                 .observeOn(mScheduler)
                 .subscribe(
                         // onNext
-                        mMainView::showWordDetailsUi,
+                        wordResponse -> {
+                            mMainView.setLoadingIndicator(false);
+                            mMainView.showWordDetailsUi(wordResponse);
+                        },
                         // onError
                         throwable -> mMainView.showLoadingWordError(requestedWord));
         mCompDisps.add(fetchWordDisp);

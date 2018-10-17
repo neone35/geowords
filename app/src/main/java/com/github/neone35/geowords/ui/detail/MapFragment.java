@@ -3,7 +3,6 @@ package com.github.neone35.geowords.ui.detail;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.github.neone35.geowords.Injection;
 import com.github.neone35.geowords.R;
 import com.github.neone35.geowords.data.models.local.Word;
+import com.github.neone35.geowords.ui.MapPopupAdapter;
 import com.github.neone35.geowords.utils.MapUtils;
 import com.github.neone35.geowords.utils.PrefUtils;
 import com.google.android.gms.location.LocationRequest;
@@ -29,7 +29,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.patloew.rxlocation.RxLocation;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -113,14 +112,17 @@ public class MapFragment extends Fragment implements
         View rootView = mInflater.inflate(R.layout.fragment_map, container, false);
         ButterKnife.bind(this, rootView);
 
-        // Inflate support map fragment into this layout
-        // getChildFragmentManager returns private fragment manager to manage fragments inside this fragment
-        mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frag_google_map);
-        if (mMapFragment != null) {
-            mMapFragment.setRetainInstance(true);
-            mMapFragment.getMapAsync(this);
-            // get Word object from database and load marker on complete
-            mPresenter.getWordObject(mWord);
+        // only create fragment if there was no configuration change
+        if (savedInstanceState == null) {
+            // Inflate support map fragment into this layout
+            // getChildFragmentManager returns private fragment manager to manage fragments inside this fragment
+            mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frag_detail_google_map);
+            if (mMapFragment != null) {
+                mMapFragment.setRetainInstance(true);
+                mMapFragment.getMapAsync(this);
+                // get Word object from database and load marker on complete
+                mPresenter.getWordObject(mWord);
+            }
         }
 
         return rootView;

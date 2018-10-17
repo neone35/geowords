@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
     tools:context=".ui.main.MainActivity">
+
+    <fragment
+        android:id="@+id/frag_main_google_map"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main"
@@ -22,21 +28,56 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@android:color/white">
 
-        <AutoCompleteTextView
-            android:id="@+id/actv_search"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:padding="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/actv_rounded_bg"
-            android:hint="@string/word_to_search"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:textSize="22sp" />
+            android:layout_height="match_parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/actv_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/actv_rounded_bg"
+                android:hint="@string/word_to_search"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:padding="5dp"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/pb_main"
+                style="@style/Base.Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center|end"
+                app:layout_constraintBottom_toBottomOf="@+id/actv_search"
+                app:layout_constraintEnd_toEndOf="@+id/actv_search"
+                app:layout_constraintTop_toTopOf="@+id/actv_search" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_search"
+        android:layout_width="wrap_content"
+        app:fabSize="normal"
+        app:rippleColor="@color/colorWhite"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/ic_search_24dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp" />
+
+</FrameLayout>

@@ -1,4 +1,4 @@
-package com.github.neone35.geowords.ui.detail;
+package com.github.neone35.geowords.ui;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -29,7 +29,7 @@ public class MapPopupAdapter implements GoogleMap.InfoWindowAdapter {
     @BindView(R.id.tv_detail_type_of)
     TextView tvDetailTypeOf;
 
-    MapPopupAdapter(LayoutInflater inflater) {
+    public MapPopupAdapter(LayoutInflater inflater) {
         this.inflater = inflater;
     }
 
