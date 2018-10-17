@@ -205,7 +205,36 @@ public class MainActivity extends AppCompatActivity implements
         mAllWords = new ArrayList<>(wordList);
         HistoryAdapter adapter = new HistoryAdapter(this, R.layout.activity_main_history_item, mAllWords);
         actvSearch.setAdapter(adapter);
-        showAssignedMapMarkers();
+    }
+
+    @Override
+    public void showWordsMarkers(List<Word> words) {
+        Logger.d("showWordsMarkers is called!");
+        mMap.clear();
+        // make list of words with LatLng assigned
+        ArrayList<Marker> markerList = new ArrayList<>();
+        for (int i = 0; i < mAllWords.size(); i++) {
+            Word word = mAllWords.get(i);
+            if (word.getLatLng() != null) {
+                MarkerOptions markerOptions =
+                        MapUtils.generateMarker(this,
+                                word.getLatLng(),
+                                word.getWord(),
+                                word.getIconId())
+                                .snippet(word.getPartOfSpeech());
+                Marker wordMarker = mMap.addMarker(markerOptions);
+                markerList.add(wordMarker);
+            }
+        }
+        // animate camera to all found words
+        if (!markerList.isEmpty()) {
+            LatLngBounds allWordsBounds = MapUtils.getMarkerBounds(markerList);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(allWordsBounds, 100);
+            mMap.setOnCameraIdleListener(() -> mMap.animateCamera(cu));
+            // remove idle listener after seconds
+            final Handler handler = new Handler();
+            handler.postDelayed(() -> mMap.setOnCameraIdleListener(null), 1000);
+        }
     }
 
     // called after successful word fetch
@@ -249,32 +278,5 @@ public class MainActivity extends AppCompatActivity implements
         Logger.d("Map is ready!");
         mMap = googleMap;
         mMap.setInfoWindowAdapter(new MapPopupAdapter(LayoutInflater.from(this)));
-    }
-
-    private void showAssignedMapMarkers() {
-        // make list of words with LatLng assigned
-        ArrayList<Marker> markerList = new ArrayList<>();
-        for (int i = 0; i < mAllWords.size(); i++) {
-            Word word = mAllWords.get(i);
-            if (word.getLatLng() != null) {
-                MarkerOptions markerOptions =
-                        MapUtils.generateMarker(this,
-                                word.getLatLng(),
-                                word.getWord(),
-                                word.getIconId())
-                                .snippet(word.getPartOfSpeech());
-                Marker wordMarker = mMap.addMarker(markerOptions);
-                markerList.add(wordMarker);
-            }
-        }
-        // animate camera to all found words
-        if (!markerList.isEmpty()) {
-            LatLngBounds allWordsBounds = MapUtils.getMarkerBounds(markerList);
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(allWordsBounds, 100);
-            mMap.setOnCameraIdleListener(() -> mMap.animateCamera(cu));
-            // remove idle listener after seconds
-            final Handler handler = new Handler();
-            handler.postDelayed(() -> mMap.setOnCameraIdleListener(null), 1000);
-        }
     }
 }

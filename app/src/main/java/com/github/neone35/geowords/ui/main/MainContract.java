@@ -17,6 +17,8 @@ public interface MainContract {
 
         void showWordsHistory(List<Word> words);
 
+        void showWordsMarkers(List<Word> words);
+
         void showWordDetailsUi(WordResponse wordResponse);
 
         void showLoadingWordError(String word);

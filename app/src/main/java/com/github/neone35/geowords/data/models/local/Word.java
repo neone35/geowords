@@ -2,8 +2,6 @@ package com.github.neone35.geowords.data.models.local;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

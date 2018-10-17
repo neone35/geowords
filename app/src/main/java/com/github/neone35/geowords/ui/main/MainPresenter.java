@@ -42,12 +42,17 @@ public class MainPresenter implements MainContract.Presenter {
                 .observeOn(mScheduler)
                 .subscribe(
                         // onNext
-                        mMainView::showWordsHistory,
+                        words -> {
+                            mMainView.showWordsHistory(words);
+                            mMainView.showWordsMarkers(words);
+                        },
                         // onError
                         throwable -> mMainView.showNoWords(throwable.getMessage()));
         mCompDisps.add(loadWordsDisp);
     }
 
+    // called after fetchWord, just before opening DetailActivity
+    // avoids overriding existing word (because we want to have location saved from DetailActivity)
     @Override
     public void addNewWord(Word newWord) {
         Logger.d("addNewWord is called!");
