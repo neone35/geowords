@@ -25,4 +25,10 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="WordDetailItems">
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

@@ -17,6 +17,7 @@ import org.parceler.Parcels;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -27,7 +28,9 @@ import butterknife.ButterKnife;
  */
 public class DetailFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARCEL = "parcel";
+    private Parcelable mWordResponseParcel;
+
     @BindView(R.id.tv_detail_word)
     TextView tvDetailWord;
     @BindView(R.id.tv_detail_part_of_speech)
@@ -36,7 +39,13 @@ public class DetailFragment extends Fragment {
     TextView tvDetailSynonyms;
     @BindView(R.id.tv_detail_type_of)
     TextView tvDetailTypeOf;
-    private Parcelable mWordResponseParcel;
+    @BindView(R.id.tv_detail_synonyms_label)
+    TextView tvDetailSynonymsLabel;
+    @BindView(R.id.tv_detail_type_of_label)
+    TextView tvDetailTypeOfLabel;
+
+    @BindColor(R.color.colorDivider)
+    int veryLightGray;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -45,7 +54,7 @@ public class DetailFragment extends Fragment {
     static DetailFragment newInstance(Parcelable wordResponseParcel) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_PARAM1, wordResponseParcel);
+        args.putParcelable(ARG_PARCEL, wordResponseParcel);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,7 +63,7 @@ public class DetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mWordResponseParcel = getArguments().getParcelable(ARG_PARAM1);
+            mWordResponseParcel = getArguments().getParcelable(ARG_PARCEL);
         }
     }
 
@@ -74,13 +83,17 @@ public class DetailFragment extends Fragment {
             String synonyms = Joiner.on(", ").skipNulls().join(firstResult.getSynonyms());
             tvDetailSynonyms.setText(synonyms);
         } else {
+            tvDetailSynonymsLabel.setVisibility(View.GONE);
             tvDetailSynonyms.setText(R.string.no_synonyms);
+            tvDetailSynonyms.setTextColor(veryLightGray);
         }
         if (firstResult.getTypeOf() != null) {
             String typeOfs = Joiner.on(", ").skipNulls().join(firstResult.getTypeOf());
             tvDetailTypeOf.setText(typeOfs);
         } else {
-            tvDetailSynonyms.setText(R.string.no_known_as);
+            tvDetailTypeOfLabel.setVisibility(View.GONE);
+            tvDetailTypeOf.setText(R.string.no_known_as);
+            tvDetailTypeOf.setTextColor(veryLightGray);
         }
 
         return rootView;

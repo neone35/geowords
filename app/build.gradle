@@ -9,6 +9,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
                 /* room schema export */
@@ -61,6 +63,7 @@ dependencies {
     implementation "com.facebook.stetho:stetho:$rootProject.stetho_v" // debugging in chrome
     implementation "com.facebook.stetho:stetho-okhttp3:$rootProject.stetho_v"
     // database
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
     annotationProcessor "android.arch.persistence.room:compiler:$room_v"
     implementation "android.arch.persistence.room:runtime:$room_v"
     implementation "android.arch.persistence.room:rxjava2:$room_v"

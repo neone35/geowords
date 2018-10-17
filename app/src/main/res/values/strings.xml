@@ -5,4 +5,8 @@
     <string name="add_word_marker">Add word marker</string>
     <string name="no_synonyms">No synonyms found</string>
     <string name="no_known_as">No \'known as\' found</string>
+    <string name="synonyms">Synonyms:</string>
+    <string name="type_of">Type of:</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="long_press_to_add_marker">long press to add marker</string>
 </resources>

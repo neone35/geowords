@@ -7,39 +7,82 @@
     android:layout_height="match_parent"
     tools:context=".ui.detail.DetailFragment"
     android:background="@color/colorWhite"
+    android:padding="10dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_detail_word"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="apple"
-        android:textSize="22sp"
-        />
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_detail_part_of_speech"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        tools:text="noun"
-        android:textSize="16sp"
-        />
+        <TextView
+            android:id="@+id/tv_detail_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="apple"
+            android:textSize="22sp"
+            />
 
-    <TextView
-        android:id="@+id/tv_detail_synonyms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="something, something, something"
-        android:textSize="16sp"
-        />
+        <TextView
+            android:id="@+id/tv_detail_part_of_speech"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            tools:text="noun"
+            style="@style/WordDetailItems"
+            />
 
-    <TextView
-        android:id="@+id/tv_detail_type_of"
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="apple, tree"
-        android:textSize="16sp"
-        />
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_detail_synonyms_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:text="@string/synonyms"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_detail_synonyms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="something, something, something"
+            style="@style/WordDetailItems"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_detail_type_of_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:text="@string/type_of"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_detail_type_of"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="apple, tree"
+            style="@style/WordDetailItems"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>
