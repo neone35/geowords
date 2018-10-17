@@ -46,7 +46,9 @@ public class WordRepository implements WordDataSource {
     }
 
     @Override
-    public Flowable<Word> getWord(String word) { return mWordsLocalDataSource.getWord(word); }
+    public Single<Word> getWord(String word) {
+        return mWordsLocalDataSource.getWord(word);
+    }
 
     @Override
     public Single<WordResponse> fetchWord(String word) {

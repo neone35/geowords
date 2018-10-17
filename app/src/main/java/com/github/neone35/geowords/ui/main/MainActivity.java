@@ -59,16 +59,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         }
     }
 
+    // unsubscribe onDestroy to continue operations onPause (ex. addNewWord)
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         mPresenter.subscribe();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.unsubscribe();
     }
 
     private void listenOnActv() {
@@ -150,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     // called after successful word fetch
     @Override
     public void showWordDetailsUi(WordResponse wordResponse) {
-        // make new Word from response
+        // make new Word instance from response
         Word word = new Word(wordResponse.getWord(),
                 wordResponse.getResults().get(0).getPartOfSpeech(),
                 System.currentTimeMillis(), null, 0);

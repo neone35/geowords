@@ -16,15 +16,20 @@ import java.util.List;
 public class MapUtils {
 
     public static MarkerOptions generateMarker(Context ctx, LatLng latLng, int markerBgDrawableId) {
-        // Build an icon with place name
-        IconGenerator iconGenerator = new IconGenerator(ctx);
-        iconGenerator.setBackground(ctx.getResources().getDrawable(markerBgDrawableId));
-        Bitmap bitmap = iconGenerator.makeIcon();
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
-        // Build a marker
-        return new MarkerOptions()
-                .position(latLng)
-                .icon(icon);
+        // Build an marker with custom or default icon
+        if (markerBgDrawableId != 0) {
+            IconGenerator iconGenerator = new IconGenerator(ctx);
+            iconGenerator.setBackground(ctx.getResources().getDrawable(markerBgDrawableId));
+            Bitmap bitmap = iconGenerator.makeIcon();
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
+            // Build a marker
+            return new MarkerOptions()
+                    .position(latLng)
+                    .icon(icon);
+        } else {
+            return new MarkerOptions()
+                    .position(latLng);
+        }
     }
 
     public static LatLngBounds getMarkerBounds(List<Marker> markerList) {

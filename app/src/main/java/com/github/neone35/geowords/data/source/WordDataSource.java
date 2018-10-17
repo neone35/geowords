@@ -12,7 +12,7 @@ public interface WordDataSource {
 
     Flowable<List<Word>> getWords();
 
-    Flowable<Word> getWord(String word);
+    Single<Word> getWord(String word);
 
     Single<WordResponse> fetchWord(String word);
 

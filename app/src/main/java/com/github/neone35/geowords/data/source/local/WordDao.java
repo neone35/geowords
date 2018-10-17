@@ -17,7 +17,7 @@ public interface WordDao {
 
     // Flowable triggers nothing on error; onNext on success / data update
     @Query("SELECT * FROM words WHERE word = :word")
-    Flowable<Word> getByWord(String word);
+    Single<Word> getByWord(String word);
     @Query("SELECT * FROM words ORDER BY time_millis DESC")
     Flowable<List<Word>> getAll();
 

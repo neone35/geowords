@@ -29,11 +29,10 @@ public class RemoteDataSource implements WordDataSource {
     }
 
     @Override
-    public Flowable<Word> getWord(String word) {
+    public Single<Word> getWord(String word) {
         // fetch word and instantly map into new Word object
         return mWordInteractorImpl.fetchWord(word)
                 .subscribeOn(mScheduler)
-                .toFlowable()
                 .map(wordResponse ->
                         new Word(wordResponse.getWord(),
                                 wordResponse.getResults().get(0).getPartOfSpeech(),

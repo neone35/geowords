@@ -51,7 +51,17 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void addNewWord(Word newWord) {
         Logger.d("addNewWord is called!");
-        mWordRepository.insertOrUpdateWord(newWord);
+        Disposable fetchWordDisp = mWordRepository.getWord(newWord.getWord())
+                .observeOn(mScheduler)
+                .subscribe(
+                        // onNext - if word exists, don't replace
+                        word -> Logger.d("Word " + word.getWord() + " already exists in DB"),
+                        // onError - word doesn't exist, create new
+                        throwable -> {
+                            throwable.printStackTrace();
+                            mWordRepository.insertOrUpdateWord(newWord);
+                        });
+        mCompDisps.add(fetchWordDisp);
     }
 
     @Override

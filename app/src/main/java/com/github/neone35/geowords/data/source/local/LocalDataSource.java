@@ -14,6 +14,7 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class LocalDataSource implements WordDataSource {
+    // don't forget to subscribe all requests on separate thread!
 
     private final WordDao mWordDao;
     // io thread scheduler
@@ -30,8 +31,9 @@ public class LocalDataSource implements WordDataSource {
     }
 
     @Override
-    public Flowable<Word> getWord(String word) {
-        return mWordDao.getByWord(word);
+    public Single<Word> getWord(String word) {
+        return mWordDao.getByWord(word)
+                .subscribeOn(mScheduler);
     }
 
     // not used locally as word is only received from DB
@@ -43,7 +45,7 @@ public class LocalDataSource implements WordDataSource {
     @Override
     public void insertOrUpdateWord(Word word) {
         // Reactive version of Runnable
-        Completable.fromAction(() -> mWordDao.insertOne(word))
+        Completable.fromAction(() ->  mWordDao.insertOne(word))
                 .subscribeOn(mScheduler)
                 .subscribe();
     }
