@@ -31,7 +31,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxAutoCompleteTextView;
-import com.jakewharton.rxbinding.widget.RxCompoundButton;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private MainContract.Presenter mPresenter;
     public static final String KEY_WORD_PARCELABLE = "word-parcelable";
-    private SupportMapFragment mMapFragment;
     private GoogleMap mMap;
     ArrayList<Word> mAllWords = new ArrayList<>();
 
@@ -86,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // only create fragment if there was no configuration change
         if (savedInstanceState == null) {
-            mMapFragment = (SupportMapFragment) getSupportFragmentManager()
+            SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.frag_main_google_map);
             if (mMapFragment != null) {
                 mMapFragment.setRetainInstance(true);

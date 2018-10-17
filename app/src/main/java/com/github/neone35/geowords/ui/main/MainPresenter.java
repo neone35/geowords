@@ -77,7 +77,10 @@ public class MainPresenter implements MainContract.Presenter {
                             mMainView.showWordDetailsUi(wordResponse);
                         },
                         // onError
-                        throwable -> mMainView.showLoadingWordError(requestedWord));
+                        throwable -> {
+                            mMainView.setLoadingIndicator(false);
+                            mMainView.showLoadingWordError(requestedWord);
+                        });
         mCompDisps.add(fetchWordDisp);
     }
 

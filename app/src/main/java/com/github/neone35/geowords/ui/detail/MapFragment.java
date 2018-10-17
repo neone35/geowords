@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,12 +54,10 @@ public class MapFragment extends Fragment implements
     // keep all disposables in one variable to easily unsubscribe
     private CompositeDisposable mDisps = new CompositeDisposable();
     private static LatLng mUserLatLng;
-    private static LatLng mWordLatLng;
     private Context mCtx;
     private RxLocation rxLocation;
     private RxPermissions rxPermissions;
     private String mWord;
-    private SupportMapFragment mMapFragment;
     private Word mDbWord;
     private static final String KEY_CUSTOM_ICON = "custom_icon";
     private PrefUtils mPrefUtils;
@@ -116,7 +113,7 @@ public class MapFragment extends Fragment implements
         if (savedInstanceState == null) {
             // Inflate support map fragment into this layout
             // getChildFragmentManager returns private fragment manager to manage fragments inside this fragment
-            mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frag_detail_google_map);
+            SupportMapFragment mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frag_detail_google_map);
             if (mMapFragment != null) {
                 mMapFragment.setRetainInstance(true);
                 mMapFragment.getMapAsync(this);
@@ -239,7 +236,7 @@ public class MapFragment extends Fragment implements
         // add user marker
         // if word marker doesn't exist, zoom to user
         if (mDbWord.getLatLng() != null) {
-            mWordLatLng = mDbWord.getLatLng();
+            LatLng mWordLatLng = mDbWord.getLatLng();
             cu = CameraUpdateFactory.newLatLngZoom(mWordLatLng, 15.0f);
         } else {
             cu = CameraUpdateFactory.newLatLngZoom(mUserLatLng, 15.0f);
