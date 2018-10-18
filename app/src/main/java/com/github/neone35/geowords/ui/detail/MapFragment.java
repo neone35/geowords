@@ -225,7 +225,7 @@ public class MapFragment extends Fragment implements
                             mUserLatLng = new LatLng(address.getLatitude(), address.getLongitude());
                             mMap.addMarker(MapUtils.generateMarker(mCtx, mUserLatLng, "You", R.drawable.ic_target_24dp));
                             zoomToWordOrUser();
-                        });
+                        }, Throwable::printStackTrace);
                 mDisps.add(locationDisp);
             }
         }

@@ -18,6 +18,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <!-- temporary fix for API28 Google Maps SDK -->
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
 
         <activity
             android:name=".ui.main.MainActivity"
