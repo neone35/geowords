@@ -21,10 +21,12 @@ This is a technical task provided by "MR Digital Group" (GPSWOX) for Junior Andr
    * clear project structure.
 
 ## Screenshots
-coming soon
+![Geowords user interface](https://image.ibb.co/dfKiML/geowords-app.jpg "Geowords user interface")
 
 ## What Did I Learn / Use?
 - [Words API](https://www.wordsapi.com/docs/?javascript#introduction)
 - MVP architecture pattern
 - RxJava
-> Including permissions & location
+> Including permissions, location & binding
+- AndroidX
+- Parceler
